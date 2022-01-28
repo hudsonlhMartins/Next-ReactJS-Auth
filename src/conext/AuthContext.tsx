@@ -1,7 +1,7 @@
 import Router from "next/router"
 import { createContext, ReactNode, useEffect, useState } from "react"
 
-import { setCookie, parseCookies } from 'nookies'
+import { setCookie, parseCookies, destroyCookie } from 'nookies'
 import { api } from "../services/api"
 
 interface AuthProviderProps{
@@ -36,6 +36,15 @@ type AuthContextData = {
   
   export const AuthContext = createContext({} as AuthContextData)
   
+
+  export function signOut (){
+    destroyCookie(undefined, 'nextauth.token')
+    destroyCookie(undefined, 'nextauth.refreshToken')
+
+    Router.push('/')
+  }
+
+
   export function AuthProvider({ children }: AuthProviderProps) {
     const [user, setUser] = useState<User>(null)
     const isAuthenticated = !!user
@@ -48,7 +57,10 @@ type AuthContextData = {
             const { email, permissions, roles } = response.data;
             setUser({ email, permissions, roles })
   
-          }).catch(console.log)
+          }).catch(() =>{
+            signOut()
+
+          })
       }
     }, [])
   

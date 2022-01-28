@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
-import { parseCookies, setCookie } from 'nookies'
+import {parseCookies, setCookie } from 'nookies'
+import { signOut } from "../conext/AuthContext";
 
 let isRefreshing = false;
 let failedRequestsQueue = [];
@@ -65,10 +66,12 @@ let failedRequestsQueue = [];
               onFailure: (error: AxiosError) => reject(error)
             })
           })
+        } else{
+          signOut()
         }
       }
 
-
+      // isso aqui caso não cai esse is o error vai seguir
       return Promise.reject(error)
     })
 

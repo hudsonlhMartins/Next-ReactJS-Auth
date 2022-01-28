@@ -12,7 +12,7 @@ export default function Dashboard  (){
 
             api.get('me').then(res =>{
               console.log(res)
-            })
+            }).catch(console.log)
         
     },[])
 
